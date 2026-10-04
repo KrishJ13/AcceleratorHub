@@ -20,6 +20,7 @@ public class Workload {
         this.state = WorkloadState.PENDING;
     }
 
+    // Workload.start() only represents the domain transition. It itself does not simulate the execution system 
     public void start() {
         if (this.state != WorkloadState.PENDING) {
             throw new IllegalStateException("Workload must be PENDING before starting");

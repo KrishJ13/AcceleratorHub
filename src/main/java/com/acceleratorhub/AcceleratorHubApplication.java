@@ -45,7 +45,7 @@ public class AcceleratorHubApplication {
 
 		System.out.println("--- ALLOCATION 1 ---");
 		System.out.println("Allocation created: " + allocation);
-		System.out.println("Reservation state: " + reservation.state()); // Assuming your Reservation has a state() method
+		System.out.println("Reservation state: " + reservation.state()); 
 		System.out.println("---------------------------");
 
 
@@ -55,17 +55,10 @@ public class AcceleratorHubApplication {
 		Allocation allocation_2 = allocator.allocate(request_2, reservation_2, "alloc-002");
 		System.out.println("--- ALLOCATION 2 ---");
 		System.out.println("Allocation created: " + allocation_2);
-		System.out.println("Reservation state: " + reservation_2.state()); // Assuming your Reservation has a state() method
+		System.out.println("Reservation state: " + reservation_2.state());
 		System.out.println("---------------------------");
 
 
-		ReservationRequest request_3 = new ReservationRequest("req-003", "research-b", AcceleratorClass.A100, 1);
-		Reservation reservation_3 = new Reservation("rsv-003", "research-b", request_2.id());
-		Allocation allocation_3 = allocator.allocate(request_3, reservation_3, "alloc-003");
-		System.out.println("--- ALLOCATION 3 ---");
-		System.out.println("Allocation created: " + allocation_3);
-		System.out.println("Reservation state: " + reservation_3.state()); // Assuming your Reservation has a state() method
-		System.out.println("---------------------------");
 
 		SpringApplication.run(AcceleratorHubApplication.class, args);
 	}
