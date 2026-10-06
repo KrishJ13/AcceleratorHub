@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.acceleratorhub.application.ReservationApplicationService;
 import com.acceleratorhub.application.ReservationCreationResult;
 
+import jakarta.validation.Valid;
+
 @RestController // Spring-managed class that handles web requests and where returned values should be written into HTTP responses
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
@@ -30,7 +32,8 @@ public class ReservationController {
     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // On Successful return 201 Created HTTP status
-    public CreateReservationResponse create(@RequestBody CreateReservationRequest request) { //@RequestBody tells Spring to Deserialise (HTTP -> Java Object) the HTTP into the CreateReservationRequest body
+    // @Valid calls the Validator Engine
+    public CreateReservationResponse create(@Valid @RequestBody CreateReservationRequest request) { //@RequestBody tells Spring to Deserialise (HTTP -> Java Object) the HTTP into the CreateReservationRequest body
         ReservationCreationResult result = service.create(request.acceleratorClass(), request.quantity());
         
         return new CreateReservationResponse(result.reservationId(), result.reservationState(), result.acceleratorId(), result.workloadId(), result.workloadState());

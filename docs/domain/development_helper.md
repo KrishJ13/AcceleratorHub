@@ -18,3 +18,13 @@
 - Service.create() returns ReservationCreationResult (In the application layer) to confirm the following actions above. 
 - CreateReservationResponse acts as DTO (Data Transfer Object) intermediate layer for now
 - Spring handles serialising (TO HTTP JSON) CreateReservationResponse and sending the response to the user
+
+
+## Tracing a Valid HTTP Request
+JSON -> deserialise -> validate -> controller -> application service -> domain succeeds -> 201 Created
+
+## Tracing an Invalid HTTP Request
+JSON -> deserialise -> validate -> fails at HTTP boundary -> ApiExceptionHandler -> 400 INVALID_REQUEST
+
+## Tracing a Valid HTTP Request but not Possible
+JSON -> deserialise -> validate -> controller -> application service -> allocator -> NoCapacityException -> ApiExceptionHandler -> 409 NO_CAPACITY
