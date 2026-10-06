@@ -15,8 +15,17 @@ public class InMemoryCapacityInventory {
         this.allocations = new ArrayList<>(); // Initialise allocations as a dynamic list
     }
 
+    // Add safe read access helper to get units and allocations
+    public List<AcceleratorUnit> units() {
+        return List.copyOf(this.units);
+    }
+
+    public List<Allocation> allocations() {
+        return List.copyOf(this.allocations);
+    }
+
     // Define a function to check if an AcceleratorUnit is currently allocated
-    private boolean isAllocated(AcceleratorUnit unit) {
+    public boolean isAllocated(AcceleratorUnit unit) {
         for (Allocation alloc : allocations) {
             if (alloc.acceleratorId().equals(unit.id())) {
                 return true;
