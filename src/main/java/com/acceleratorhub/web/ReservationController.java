@@ -1,6 +1,8 @@
 package com.acceleratorhub.web;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.acceleratorhub.application.ReservationApplicationService;
 import com.acceleratorhub.application.ReservationCreationResult;
+import com.acceleratorhub.application.ReservationQueryService;
+import com.acceleratorhub.application.ReservationView;
 
 import jakarta.validation.Valid;
 
@@ -16,10 +20,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
     
-    private final ReservationApplicationService service;
+    private final ReservationApplicationService applicationService;
+    private final ReservationQueryService queryService;
 
-    public ReservationController(ReservationApplicationService service) {
-        this.service = service; // Spring injects ReservationApplicationService
+    public ReservationController(ReservationApplicationService applicationService, ReservationQueryService queryService) {
+        this.applicationService = applicationService; // Spring injects ReservationApplicationService
+        this.queryService = queryService;
     }
 
 
@@ -34,10 +40,16 @@ public class ReservationController {
     @ResponseStatus(HttpStatus.CREATED) // On Successful return 201 Created HTTP status
     // @Valid calls the Validator Engine
     public CreateReservationResponse create(@Valid @RequestBody CreateReservationRequest request) { //@RequestBody tells Spring to Deserialise (HTTP -> Java Object) the HTTP into the CreateReservationRequest body
-        ReservationCreationResult result = service.create(request.acceleratorClass(), request.quantity());
+        ReservationCreationResult result = applicationService.create(request.acceleratorClass(), request.quantity());
         
         return new CreateReservationResponse(result.reservationId(), result.reservationState(), result.acceleratorId(), result.workloadId(), result.workloadState());
 
+    }
+
+    @GetMapping("/{reservationId}")
+    public ReservationResponse getById(@PathVariable String reservationId) {
+        ReservationView result = queryService.getById(reservationId);
+        return new ReservationResponse(result.reservationId(), result.requestId(), result.tenantId(), result.state());
     }
 
 

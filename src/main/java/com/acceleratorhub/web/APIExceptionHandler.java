@@ -1,6 +1,8 @@
 package com.acceleratorhub.web;
 
 import com.acceleratorhub.domain.NoCapacityException;
+import com.acceleratorhub.domain.ReservationNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +45,15 @@ public class APIExceptionHandler {
         return new APIError(
                 APIErrorCode.NO_CAPACITY,
                 exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(ReservationNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public APIError handleReservationNotFound(ReservationNotFoundException exception) {
+        return new APIError(
+            APIErrorCode.RESERVATION_NOT_FOUND,
+            exception.getMessage()
         );
     }
 }

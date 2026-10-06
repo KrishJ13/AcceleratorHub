@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.acceleratorhub.domain.AcceleratorClass;
 import com.acceleratorhub.domain.Allocation;
+import com.acceleratorhub.domain.InMemoryReservationStore;
 import com.acceleratorhub.domain.Reservation;
 import com.acceleratorhub.domain.ReservationAllocator;
 import com.acceleratorhub.domain.ReservationRequest;
@@ -25,10 +26,12 @@ public class ReservationApplicationService {
 
     private final ReservationAllocator allocator;
     private final WorkloadLauncher launcher;
+    private final InMemoryReservationStore reservationStore;
 
-    public ReservationApplicationService(ReservationAllocator allocator, WorkloadLauncher launcher) {
+    public ReservationApplicationService(ReservationAllocator allocator, WorkloadLauncher launcher, InMemoryReservationStore reservationStore) {
         this.allocator = allocator;
         this.launcher = launcher;
+        this.reservationStore = reservationStore;
     }
 
     public ReservationCreationResult create(AcceleratorClass acceleratorClass, int quantity) {
@@ -46,6 +49,9 @@ public class ReservationApplicationService {
 
         // Build the allocation
         Allocation allocation = allocator.allocate(request, reservation, allocationId);
+
+        // Now, save the reservation after allocation was successfully done BUT before workload in-case of workload error
+        reservationStore.save(reservation); // The same reservation, will become ACTIVE later
 
         // Launch the workload
         Workload workload = launcher.launch(reservation, workloadId);   
