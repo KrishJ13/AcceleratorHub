@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body { font-family: system-ui; padding: 2rem; }
+            #count { font-size: 2rem; }
+        </style>
+    </head>
+</html>
+<body>
+    <p id="count">0</p>
+    <p id="parity">even</p>
+    <button id="btn">Add one</button>
+    <button id="reset">Reset</button>
+
+    <script>
+        let count = 0
+
+        function render() {
+        document.getElementById('count').textContent  = count
+        document.getElementById('parity').textContent = count % 2 === 0 ? 'even' : 'odd'
+        }
+
+        render()  // paint the initial screen
+
+        document.getElementById('btn').addEventListener('click', () => {
+        count = count + 1
+        render()                       // the entire update
+        })
+
+        document.getElementById('reset').addEventListener('click', () => {
+        count = 0
+        render()                       // the entire update
+        })
+    </script>
+</body>
+

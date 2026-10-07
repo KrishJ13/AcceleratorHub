@@ -21,7 +21,7 @@ public class InMemoryReservationStore {
     public void save(Reservation reservation) {
         if (this.reservations.containsKey(reservation.id())) {
             throw new IllegalStateException("Reservation already exists: " + reservation.id());
-        }
+        } 
         this.reservations.put(reservation.id(), reservation);
     }
 
