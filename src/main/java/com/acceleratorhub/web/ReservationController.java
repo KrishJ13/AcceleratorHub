@@ -1,5 +1,8 @@
 package com.acceleratorhub.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +31,21 @@ public class ReservationController {
         this.queryService = queryService;
     }
 
+
+    @GetMapping
+    public ReservationListResponse getAll() {
+        // Call the query service
+        List<ReservationView> reservationViews = this.queryService.getAll();
+        
+        // Map each ReservationView to ReservationResponse (DTO)
+        List<ReservationResponse> reservationResponses = new ArrayList<>();
+        for (ReservationView view : reservationViews) {
+            reservationResponses.add(new ReservationResponse(view.reservationId(), view.requestId(), view.tenantId(), view.state()));
+        }
+
+        // Map to the Web. DTO ReservationListResponse and return
+        return new ReservationListResponse(List.copyOf(reservationResponses));
+    }
 
     /*
     With this structure, we keep the controller logic abstracted and simple. The controller does not directly know about:

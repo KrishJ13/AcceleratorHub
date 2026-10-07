@@ -1,6 +1,7 @@
 package com.acceleratorhub.domain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +27,10 @@ public class InMemoryReservationStore {
 
     public Optional<Reservation> findById(String id) {
         return Optional.ofNullable(this.reservations.get(id));
+    }
+
+    public List<Reservation> findAll() {
+        return List.copyOf(this.reservations.values()); // List.copyOf() protects the list itself, but not the structures inside. Later, use persistance to solve this problem
     }
 
 }
